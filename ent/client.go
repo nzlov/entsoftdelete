@@ -195,7 +195,9 @@ func (c *TaskClient) DeleteOneID(id int) *TaskDeleteOne {
 
 // Query returns a query builder for Task.
 func (c *TaskClient) Query() *TaskQuery {
-	return newTaskQuery(c.config)
+	return &TaskQuery{
+		config: c.config,
+	}
 }
 
 // Get returns a Task entity by its id.
@@ -283,7 +285,9 @@ func (c *UserClient) DeleteOneID(id int) *UserDeleteOne {
 
 // Query returns a query builder for User.
 func (c *UserClient) Query() *UserQuery {
-	return newUserQuery(c.config)
+	return &UserQuery{
+		config: c.config,
+	}
 }
 
 // Get returns a User entity by its id.
