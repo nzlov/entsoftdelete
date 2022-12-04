@@ -29,12 +29,6 @@ type UserQuery struct {
 	path func(context.Context) (*sql.Selector, error)
 }
 
-func newUserQuery(config config) *UserQuery {
-	return &UserQuery{
-		config: config,
-	}
-}
-
 // Real for the UserQuery builder.
 func (uq *UserQuery) Real() *UserQuery {
 	uq.softdelete = true

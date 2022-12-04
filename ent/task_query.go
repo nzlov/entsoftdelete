@@ -28,12 +28,6 @@ type TaskQuery struct {
 	path func(context.Context) (*sql.Selector, error)
 }
 
-func newTaskQuery(config config) *TaskQuery {
-	return &TaskQuery{
-		config: config,
-	}
-}
-
 // Where adds a new predicate for the TaskQuery builder.
 func (tq *TaskQuery) Where(ps ...predicate.Task) *TaskQuery {
 	tq.predicates = append(tq.predicates, ps...)
