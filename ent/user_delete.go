@@ -22,8 +22,8 @@ type UserDelete struct {
 	up       *UserUpdate
 }
 
-// SoftDelete adds a new predicate for the UserDelete builder.
-func (ud *UserDelete) SoftDelete() *UserDelete {
+// Real for the UserDelete builder.
+func (ud *UserDelete) Real() *UserDelete {
 	ud.up = nil
 	return ud
 }
@@ -38,7 +38,7 @@ func (ud *UserDelete) Where(ps ...predicate.User) *UserDelete {
 func (ud *UserDelete) Exec(ctx context.Context) (int, error) {
 	if ud.up != nil {
 		ud.up.mutation = ud.mutation
-		ud.up.SetDeletedAt(int(time.Now().UnixNano()))
+		ud.up.SetDeletedAt(time.Now())
 		return ud.up.Save(ctx)
 	}
 	var (
@@ -109,9 +109,9 @@ type UserDeleteOne struct {
 	ud *UserDelete
 }
 
-// SoftDelete adds a new predicate for the UserDelete builder.
-func (udo *UserDeleteOne) SoftDelete() *UserDeleteOne {
-	udo.ud.SoftDelete()
+// Real for the UserDelete builder.
+func (udo *UserDeleteOne) Real() *UserDeleteOne {
+	udo.ud.Real()
 	return udo
 }
 

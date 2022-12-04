@@ -4,6 +4,7 @@ package user
 
 import (
 	"entsoftdelete/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 )
@@ -80,7 +81,7 @@ func IDLTE(id int) predicate.User {
 }
 
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
-func DeletedAt(v int) predicate.User {
+func DeletedAt(v time.Time) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldDeletedAt), v))
 	})
@@ -93,29 +94,22 @@ func Name(v string) predicate.User {
 	})
 }
 
-// Test applies equality check predicate on the "test" field. It's identical to TestEQ.
-func Test(v string) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldTest), v))
-	})
-}
-
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
-func DeletedAtEQ(v int) predicate.User {
+func DeletedAtEQ(v time.Time) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldDeletedAt), v))
 	})
 }
 
 // DeletedAtNEQ applies the NEQ predicate on the "deleted_at" field.
-func DeletedAtNEQ(v int) predicate.User {
+func DeletedAtNEQ(v time.Time) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldDeletedAt), v))
 	})
 }
 
 // DeletedAtIn applies the In predicate on the "deleted_at" field.
-func DeletedAtIn(vs ...int) predicate.User {
+func DeletedAtIn(vs ...time.Time) predicate.User {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -126,7 +120,7 @@ func DeletedAtIn(vs ...int) predicate.User {
 }
 
 // DeletedAtNotIn applies the NotIn predicate on the "deleted_at" field.
-func DeletedAtNotIn(vs ...int) predicate.User {
+func DeletedAtNotIn(vs ...time.Time) predicate.User {
 	v := make([]any, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -137,28 +131,28 @@ func DeletedAtNotIn(vs ...int) predicate.User {
 }
 
 // DeletedAtGT applies the GT predicate on the "deleted_at" field.
-func DeletedAtGT(v int) predicate.User {
+func DeletedAtGT(v time.Time) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldDeletedAt), v))
 	})
 }
 
 // DeletedAtGTE applies the GTE predicate on the "deleted_at" field.
-func DeletedAtGTE(v int) predicate.User {
+func DeletedAtGTE(v time.Time) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldDeletedAt), v))
 	})
 }
 
 // DeletedAtLT applies the LT predicate on the "deleted_at" field.
-func DeletedAtLT(v int) predicate.User {
+func DeletedAtLT(v time.Time) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldDeletedAt), v))
 	})
 }
 
 // DeletedAtLTE applies the LTE predicate on the "deleted_at" field.
-func DeletedAtLTE(v int) predicate.User {
+func DeletedAtLTE(v time.Time) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldDeletedAt), v))
 	})
@@ -274,105 +268,6 @@ func NameEqualFold(v string) predicate.User {
 func NameContainsFold(v string) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldName), v))
-	})
-}
-
-// TestEQ applies the EQ predicate on the "test" field.
-func TestEQ(v string) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldTest), v))
-	})
-}
-
-// TestNEQ applies the NEQ predicate on the "test" field.
-func TestNEQ(v string) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldTest), v))
-	})
-}
-
-// TestIn applies the In predicate on the "test" field.
-func TestIn(vs ...string) predicate.User {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.In(s.C(FieldTest), v...))
-	})
-}
-
-// TestNotIn applies the NotIn predicate on the "test" field.
-func TestNotIn(vs ...string) predicate.User {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.NotIn(s.C(FieldTest), v...))
-	})
-}
-
-// TestGT applies the GT predicate on the "test" field.
-func TestGT(v string) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldTest), v))
-	})
-}
-
-// TestGTE applies the GTE predicate on the "test" field.
-func TestGTE(v string) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldTest), v))
-	})
-}
-
-// TestLT applies the LT predicate on the "test" field.
-func TestLT(v string) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldTest), v))
-	})
-}
-
-// TestLTE applies the LTE predicate on the "test" field.
-func TestLTE(v string) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldTest), v))
-	})
-}
-
-// TestContains applies the Contains predicate on the "test" field.
-func TestContains(v string) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldTest), v))
-	})
-}
-
-// TestHasPrefix applies the HasPrefix predicate on the "test" field.
-func TestHasPrefix(v string) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldTest), v))
-	})
-}
-
-// TestHasSuffix applies the HasSuffix predicate on the "test" field.
-func TestHasSuffix(v string) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldTest), v))
-	})
-}
-
-// TestEqualFold applies the EqualFold predicate on the "test" field.
-func TestEqualFold(v string) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldTest), v))
-	})
-}
-
-// TestContainsFold applies the ContainsFold predicate on the "test" field.
-func TestContainsFold(v string) predicate.User {
-	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldTest), v))
 	})
 }
 

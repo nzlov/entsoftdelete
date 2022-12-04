@@ -2,7 +2,6 @@ package schema
 
 import (
 	"entgo.io/ent"
-	"entgo.io/ent/dialect"
 	"entgo.io/ent/schema/field"
 )
 
@@ -14,11 +13,8 @@ type User struct {
 // Fields of the User.
 func (User) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int("deleted_at").Nillable().Optional(),
-		field.String("name").StorageKey("nickname"),
-		field.String("test").SchemaType(map[string]string{
-			dialect.Postgres: "numeric",
-		}),
+		field.Time("deleted_at").SoftDelete().Nillable().Optional(),
+		field.String("name"),
 	}
 }
 

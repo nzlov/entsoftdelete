@@ -7,6 +7,7 @@ import (
 	"entsoftdelete/ent/user"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -20,15 +21,15 @@ type UserCreate struct {
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (uc *UserCreate) SetDeletedAt(i int) *UserCreate {
-	uc.mutation.SetDeletedAt(i)
+func (uc *UserCreate) SetDeletedAt(t time.Time) *UserCreate {
+	uc.mutation.SetDeletedAt(t)
 	return uc
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (uc *UserCreate) SetNillableDeletedAt(i *int) *UserCreate {
-	if i != nil {
-		uc.SetDeletedAt(*i)
+func (uc *UserCreate) SetNillableDeletedAt(t *time.Time) *UserCreate {
+	if t != nil {
+		uc.SetDeletedAt(*t)
 	}
 	return uc
 }
@@ -36,12 +37,6 @@ func (uc *UserCreate) SetNillableDeletedAt(i *int) *UserCreate {
 // SetName sets the "name" field.
 func (uc *UserCreate) SetName(s string) *UserCreate {
 	uc.mutation.SetName(s)
-	return uc
-}
-
-// SetTest sets the "test" field.
-func (uc *UserCreate) SetTest(s string) *UserCreate {
-	uc.mutation.SetTest(s)
 	return uc
 }
 
@@ -124,9 +119,6 @@ func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "User.name"`)}
 	}
-	if _, ok := uc.mutation.Test(); !ok {
-		return &ValidationError{Name: "test", err: errors.New(`ent: missing required field "User.test"`)}
-	}
 	return nil
 }
 
@@ -155,16 +147,12 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		}
 	)
 	if value, ok := uc.mutation.DeletedAt(); ok {
-		_spec.SetField(user.FieldDeletedAt, field.TypeInt, value)
+		_spec.SetField(user.FieldDeletedAt, field.TypeTime, value)
 		_node.DeletedAt = &value
 	}
 	if value, ok := uc.mutation.Name(); ok {
 		_spec.SetField(user.FieldName, field.TypeString, value)
 		_node.Name = value
-	}
-	if value, ok := uc.mutation.Test(); ok {
-		_spec.SetField(user.FieldTest, field.TypeString, value)
-		_node.Test = value
 	}
 	return _node, _spec
 }

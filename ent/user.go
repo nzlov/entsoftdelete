@@ -6,6 +6,7 @@ import (
 	"entsoftdelete/ent/user"
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 )
@@ -16,11 +17,9 @@ type User struct {
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt *int `json:"deleted_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
-	// Test holds the value of the "test" field.
-	Test string `json:"test,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -28,10 +27,12 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case user.FieldID, user.FieldDeletedAt:
+		case user.FieldID:
 			values[i] = new(sql.NullInt64)
-		case user.FieldName, user.FieldTest:
+		case user.FieldName:
 			values[i] = new(sql.NullString)
+		case user.FieldDeletedAt:
+			values[i] = new(sql.NullTime)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type User", columns[i])
 		}
@@ -54,23 +55,17 @@ func (u *User) assignValues(columns []string, values []any) error {
 			}
 			u.ID = int(value.Int64)
 		case user.FieldDeletedAt:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				u.DeletedAt = new(int)
-				*u.DeletedAt = int(value.Int64)
+				u.DeletedAt = new(time.Time)
+				*u.DeletedAt = value.Time
 			}
 		case user.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				u.Name = value.String
-			}
-		case user.FieldTest:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field test", values[i])
-			} else if value.Valid {
-				u.Test = value.String
 			}
 		}
 	}
@@ -102,14 +97,11 @@ func (u *User) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", u.ID))
 	if v := u.DeletedAt; v != nil {
 		builder.WriteString("deleted_at=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
+		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(u.Name)
-	builder.WriteString(", ")
-	builder.WriteString("test=")
-	builder.WriteString(u.Test)
 	builder.WriteByte(')')
 	return builder.String()
 }

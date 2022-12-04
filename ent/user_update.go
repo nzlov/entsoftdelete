@@ -8,6 +8,7 @@ import (
 	"entsoftdelete/ent/user"
 	"errors"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -22,8 +23,8 @@ type UserUpdate struct {
 	mutation   *UserMutation
 }
 
-// SoftDelete adds a new predicate for the UserUpdate builder.
-func (uu *UserUpdate) SoftDelete() *UserUpdate {
+// Real for the UserUpdate builder.
+func (uu *UserUpdate) Real() *UserUpdate {
 	uu.softdelete = true
 	return uu
 }
@@ -35,23 +36,16 @@ func (uu *UserUpdate) Where(ps ...predicate.User) *UserUpdate {
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (uu *UserUpdate) SetDeletedAt(i int) *UserUpdate {
-	uu.mutation.ResetDeletedAt()
-	uu.mutation.SetDeletedAt(i)
+func (uu *UserUpdate) SetDeletedAt(t time.Time) *UserUpdate {
+	uu.mutation.SetDeletedAt(t)
 	return uu
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (uu *UserUpdate) SetNillableDeletedAt(i *int) *UserUpdate {
-	if i != nil {
-		uu.SetDeletedAt(*i)
+func (uu *UserUpdate) SetNillableDeletedAt(t *time.Time) *UserUpdate {
+	if t != nil {
+		uu.SetDeletedAt(*t)
 	}
-	return uu
-}
-
-// AddDeletedAt adds i to the "deleted_at" field.
-func (uu *UserUpdate) AddDeletedAt(i int) *UserUpdate {
-	uu.mutation.AddDeletedAt(i)
 	return uu
 }
 
@@ -64,12 +58,6 @@ func (uu *UserUpdate) ClearDeletedAt() *UserUpdate {
 // SetName sets the "name" field.
 func (uu *UserUpdate) SetName(s string) *UserUpdate {
 	uu.mutation.SetName(s)
-	return uu
-}
-
-// SetTest sets the "test" field.
-func (uu *UserUpdate) SetTest(s string) *UserUpdate {
-	uu.mutation.SetTest(s)
 	return uu
 }
 
@@ -154,19 +142,13 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 	}
 	if value, ok := uu.mutation.DeletedAt(); ok {
-		_spec.SetField(user.FieldDeletedAt, field.TypeInt, value)
-	}
-	if value, ok := uu.mutation.AddedDeletedAt(); ok {
-		_spec.AddField(user.FieldDeletedAt, field.TypeInt, value)
+		_spec.SetField(user.FieldDeletedAt, field.TypeTime, value)
 	}
 	if uu.mutation.DeletedAtCleared() {
-		_spec.ClearField(user.FieldDeletedAt, field.TypeInt)
+		_spec.ClearField(user.FieldDeletedAt, field.TypeTime)
 	}
 	if value, ok := uu.mutation.Name(); ok {
 		_spec.SetField(user.FieldName, field.TypeString, value)
-	}
-	if value, ok := uu.mutation.Test(); ok {
-		_spec.SetField(user.FieldTest, field.TypeString, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -188,23 +170,16 @@ type UserUpdateOne struct {
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (uuo *UserUpdateOne) SetDeletedAt(i int) *UserUpdateOne {
-	uuo.mutation.ResetDeletedAt()
-	uuo.mutation.SetDeletedAt(i)
+func (uuo *UserUpdateOne) SetDeletedAt(t time.Time) *UserUpdateOne {
+	uuo.mutation.SetDeletedAt(t)
 	return uuo
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableDeletedAt(i *int) *UserUpdateOne {
-	if i != nil {
-		uuo.SetDeletedAt(*i)
+func (uuo *UserUpdateOne) SetNillableDeletedAt(t *time.Time) *UserUpdateOne {
+	if t != nil {
+		uuo.SetDeletedAt(*t)
 	}
-	return uuo
-}
-
-// AddDeletedAt adds i to the "deleted_at" field.
-func (uuo *UserUpdateOne) AddDeletedAt(i int) *UserUpdateOne {
-	uuo.mutation.AddDeletedAt(i)
 	return uuo
 }
 
@@ -217,12 +192,6 @@ func (uuo *UserUpdateOne) ClearDeletedAt() *UserUpdateOne {
 // SetName sets the "name" field.
 func (uuo *UserUpdateOne) SetName(s string) *UserUpdateOne {
 	uuo.mutation.SetName(s)
-	return uuo
-}
-
-// SetTest sets the "test" field.
-func (uuo *UserUpdateOne) SetTest(s string) *UserUpdateOne {
-	uuo.mutation.SetTest(s)
 	return uuo
 }
 
@@ -334,19 +303,13 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 		}
 	}
 	if value, ok := uuo.mutation.DeletedAt(); ok {
-		_spec.SetField(user.FieldDeletedAt, field.TypeInt, value)
-	}
-	if value, ok := uuo.mutation.AddedDeletedAt(); ok {
-		_spec.AddField(user.FieldDeletedAt, field.TypeInt, value)
+		_spec.SetField(user.FieldDeletedAt, field.TypeTime, value)
 	}
 	if uuo.mutation.DeletedAtCleared() {
-		_spec.ClearField(user.FieldDeletedAt, field.TypeInt)
+		_spec.ClearField(user.FieldDeletedAt, field.TypeTime)
 	}
 	if value, ok := uuo.mutation.Name(); ok {
 		_spec.SetField(user.FieldName, field.TypeString, value)
-	}
-	if value, ok := uuo.mutation.Test(); ok {
-		_spec.SetField(user.FieldTest, field.TypeString, value)
 	}
 	_node = &User{config: uuo.config}
 	_spec.Assign = _node.assignValues

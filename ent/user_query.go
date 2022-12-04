@@ -35,8 +35,8 @@ func newUserQuery(config config) *UserQuery {
 	}
 }
 
-// SoftDelete adds a new predicate for the UserQuery builder.
-func (uq *UserQuery) SoftDelete() *UserQuery {
+// Real for the UserQuery builder.
+func (uq *UserQuery) Real() *UserQuery {
 	uq.softdelete = true
 	return uq
 }
@@ -270,7 +270,7 @@ func (uq *UserQuery) Clone() *UserQuery {
 // Example:
 //
 //	var v []struct {
-//		DeletedAt int `json:"deleted_at,omitempty"`
+//		DeletedAt time.Time `json:"deleted_at,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -298,7 +298,7 @@ func (uq *UserQuery) GroupBy(field string, fields ...string) *UserGroupBy {
 // Example:
 //
 //	var v []struct {
-//		DeletedAt int `json:"deleted_at,omitempty"`
+//		DeletedAt time.Time `json:"deleted_at,omitempty"`
 //	}
 //
 //	client.User.Query().

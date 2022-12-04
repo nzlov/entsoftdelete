@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"entsoftdelete/ent"
+	"entsoftdelete/ent/task"
 	"entsoftdelete/ent/user"
 	"fmt"
 	"log"
@@ -23,42 +24,68 @@ func main() {
 	}
 	ctx := context.Background()
 
-	_, err = client.User.Create().SetName("a").SetTest("test").Save(ctx)
-	if err != nil {
-		panic(err)
-	}
-	u, err := client.User.Query().Where(user.Name("a")).First(ctx)
-	if err != nil {
-		panic(err)
-	}
-	if err := client.User.DeleteOne(u).Exec(ctx); err != nil {
-		panic(err)
-	}
+	{
 
-	_, err = client.User.Query().Where(user.Name("a")).First(ctx)
-	if err == nil {
-		panic("found no soft delete user")
-	} else {
-		if !ent.IsNotFound(err) {
+		_, err = client.User.Create().SetName("a").Save(ctx)
+		if err != nil {
 			panic(err)
 		}
-	}
-
-	nu, err := client.User.Query().SoftDelete().Where(user.Name("a")).First(ctx)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(nu)
-
-	if err := client.User.DeleteOne(nu).SoftDelete().Exec(ctx); err != nil {
-		panic(err)
-	}
-	_, err = client.User.Query().SoftDelete().Where(user.Name("a")).First(ctx)
-	if err == nil {
-		panic("found no delete user")
-	} else {
-		if !ent.IsNotFound(err) {
+		u, err := client.User.Query().Where(user.Name("a")).First(ctx)
+		if err != nil {
 			panic(err)
 		}
+		if err := client.User.DeleteOne(u).Exec(ctx); err != nil {
+			panic(err)
+		}
+
+		_, err = client.User.Query().Where(user.Name("a")).First(ctx)
+		if err == nil {
+			panic("found no soft delete user")
+		} else {
+			if !ent.IsNotFound(err) {
+				panic(err)
+			}
+		}
+
+		nu, err := client.User.Query().Real().Where(user.Name("a")).First(ctx)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(nu)
+
+		if err := client.User.DeleteOne(nu).Real().Exec(ctx); err != nil {
+			panic(err)
+		}
+		_, err = client.User.Query().Real().Where(user.Name("a")).First(ctx)
+		if err == nil {
+			panic("found no delete user")
+		} else {
+			if !ent.IsNotFound(err) {
+				panic(err)
+			}
+		}
+	}
+	{
+
+		_, err = client.Task.Create().SetName("a").Save(ctx)
+		if err != nil {
+			panic(err)
+		}
+		u, err := client.Task.Query().Where(task.Name("a")).First(ctx)
+		if err != nil {
+			panic(err)
+		}
+		if err := client.Task.DeleteOne(u).Exec(ctx); err != nil {
+			panic(err)
+		}
+		_, err = client.Task.Query().Where(task.Name("a")).First(ctx)
+		if err == nil {
+			panic("found no soft delete user")
+		} else {
+			if !ent.IsNotFound(err) {
+				panic(err)
+			}
+		}
+
 	}
 }

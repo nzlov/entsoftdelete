@@ -1,3 +1,3 @@
 package ent
 
-//go:generate go run entgo.io/ent/cmd/ent generate --softdelete DeletedAt ./schema
+//go:generate go run entgo.io/ent/cmd/ent generate ./schema
